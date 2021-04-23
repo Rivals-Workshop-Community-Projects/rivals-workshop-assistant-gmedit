@@ -1,0 +1,6 @@
+{
+  "name": "rivals-workshop-assistant-gmedit",
+  "scripts": ["assistant.js"],
+  "stylesheets": [],
+  "dependencies": []
+}
