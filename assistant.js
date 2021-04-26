@@ -12,7 +12,7 @@
     function runAssistant(env) {
         console.log("RUN")
         const projectDir = getProjectDir()
-        const command = pluginDir + `\\rivals_workshop_assistant.exe ` + projectDir;
+        const command = `"${pluginDir}\\rivals_workshop_assistant.exe" `+ `"${projectDir}"`;
         console.log("Command: ", command)
         try {
             stdout = childProcess.execFileSync(command, [pluginDir], {shell: true})
