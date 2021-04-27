@@ -21,11 +21,16 @@
             return;
         }
         console.log(`stdout: ${stdout}`);
-
+        console.log(env)
+        const cursor = env.file.codeEditor.session.multiSelect.cursor;
+        const row = cursor.row;
+        const column = cursor.column;
+        console.log("cursor pos is", row, column)
         // Manually reload gmedit window.
         try {
             env.file.editor.load();
             env.file.editor.session.setValue(env.file.code);
+            env.file.editor.session.selection.moveCursorTo(row, column);
         } catch (err) {}
     }
 
