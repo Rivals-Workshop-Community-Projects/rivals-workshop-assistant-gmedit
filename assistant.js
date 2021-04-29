@@ -10,7 +10,6 @@
     }
 
     function runAssistant(env) {
-        console.log("RUN")
         const projectDir = getProjectDir()
         const command = `"${pluginDir}\\rivals_workshop_assistant.exe" `+ `"${projectDir}"`;
         console.log("Command: ", command)
@@ -21,12 +20,10 @@
             return;
         }
         console.log(`stdout: ${stdout}`);
-        console.log(env)
         try {
             const cursor = env.file.codeEditor.session.multiSelect.cursor;
             const row = cursor.row;
             const column = cursor.column;
-            console.log("cursor pos is", row, column)
             // Manually reload gmedit window.
             env.file.editor.load();
             env.file.editor.session.setValue(env.file.code);
