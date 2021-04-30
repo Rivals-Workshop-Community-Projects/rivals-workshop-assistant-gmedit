@@ -15,11 +15,11 @@
         console.log("Command: ", command)
         try {
             stdout = childProcess.execFileSync(command, [pluginDir], {shell: true})
+            console.log(`stdout: ${stdout}`);
         } catch (err) {
             console.log(err);
             return;
         }
-        console.log(`stdout: ${stdout}`);
         try {
             const cursor = env.file.codeEditor.session.multiSelect.cursor;
             const row = cursor.row;
