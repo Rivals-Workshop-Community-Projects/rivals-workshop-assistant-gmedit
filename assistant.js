@@ -4,6 +4,7 @@
     const pluginDir = pluginRootDir + '/rivals-workshop-assistant-gmedit';
 
     const chokidar = require(pluginDir + '/chokidar');
+    // const AceGmlWarningMarker = $gmedit['ace.gml.AceGmlWarningMarker'];
 
     function getProjectDir(){
         return $gmedit["gml.Project"].current.dir;
@@ -28,9 +29,35 @@
             env.file.editor.load();
             env.file.editor.session.setValue(env.file.code);
             env.file.editor.session.selection.moveCursorTo(row, column);
-        } catch (err) {}
-
+            // console.log("gonna do it")
+            // addWarnings(env)
+            // console.log("done")
+        } catch (err) {
+            if (err instanceof RangeError) {
+                
+              } else {
+                throw err;
+              }
+        }      
     }
+
+    // function addWarning(env, text, lineNum) {
+    //     console.log("starting", env, AceGmlWarningMarker)
+    //     var marker = new AceGmlWarningMarker(env.file.editor.session,
+    //         lineNum,
+    //         "ace_warning-line");
+    //
+    //     session.gmlErrorMarkers.push(marker.addTo(session));
+    //
+    //     annotations.push({
+    //         row: lineNum, column: 0, type: "warning", text: text
+    //     });
+    //     console.log("finishing")
+    // }
+    //
+    // function addWarnings(env) {
+    //     addWarning(env, "test warning", 3)
+    // }
 
     GMEdit.register("rivals-workshop-assistant-gmedit", {
         init: function () {
