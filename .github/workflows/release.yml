@@ -24,7 +24,7 @@ jobs:
         # Required, workflow file name or ID
         workflow: package.yml
         workflow_conclusion: success
-        name: rivals_workshop_assistant.exe
+        name: exe
         path: tmp/rivals-workshop-assistant-gmedit
         repo: Rivals-Workshop-Community-Projects/rivals-workshop-assistant
 
