@@ -32,7 +32,7 @@ jobs:
 
     - uses: papeloto/action-zip@v1
       with:
-        files: tmp/
+        files: tmp/rivals-workshop-assistant-gmedit/
         dest: tmp/rivals-workshop-assistant.zip
 
     - uses: actions/upload-artifact@v1
