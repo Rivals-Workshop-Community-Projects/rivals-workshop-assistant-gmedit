@@ -14,7 +14,8 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - run: rsync -a --exclude='.*' . tmp/rivals-workshop-assistant-gmedit
+    - run: mkdir -p tmp/rivals-workshop-assistant-gmedit
+    - run: rsync -a --exclude='.*|tmp' . tmp/rivals-workshop-assistant-gmedit
 
     - name: Download artifact
       uses: dawidd6/action-download-artifact@v2
