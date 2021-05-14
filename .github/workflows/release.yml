@@ -1,0 +1,39 @@
+name: VSCE Push
+
+on:
+  push:
+    branches: [ main ]
+  repository_dispatch:
+    types: [exe-push]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - run: rsync -a --exclude='.*' . tmp/rivals-workshop-assistant-gmedit
+
+    - name: Download artifact
+      uses: dawidd6/action-download-artifact@v2
+      with:
+        github_token: ${{secrets.GITHUB_TOKEN}}
+        # Required, workflow file name or ID
+        workflow: package.yml
+        workflow_conclusion: success
+        name: rivals_workshop_assistant.exe
+        path: tmp/rivals-workshop-assistant-gmedit
+        repo: Rivals-Workshop-Community-Projects/rivals-workshop-assistant
+
+    - uses: papeloto/action-zip@v1
+      with:
+        files: tmp/rivals-workshop-assistant
+        dest: tmp/rivals-workshop-assistant.zip
+        recursive: false
+
+    - uses: actions/upload-artifact@v1
+      with:
+        name: zip
+        path: tmp/rivals-workshop-assistant.zip
