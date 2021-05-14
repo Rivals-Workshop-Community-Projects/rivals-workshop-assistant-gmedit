@@ -32,9 +32,8 @@ jobs:
       with:
         files: tmp/rivals-workshop-assistant
         dest: tmp/rivals-workshop-assistant.zip
-        recursive: false
 
     - uses: actions/upload-artifact@v1
       with:
-        name: zip
+        name: zip_preview
         path: tmp/rivals-workshop-assistant.zip
