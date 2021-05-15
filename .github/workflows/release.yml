@@ -14,7 +14,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - run: mkdir -p tmp/
+    - run: mkdir -p tmp/rivals-workshop-assistant-gmedit
     - run: rsync -a --exclude='.*' --exclude='tmp' . tmp/rivals-workshop-assistant-gmedit
 
     - name: Download artifact
@@ -32,7 +32,7 @@ jobs:
 
     - uses: papeloto/action-zip@v1
       with:
-        files: tmp/rivals-workshop-assistant-gmedit
+        files: tmp/
         dest: tmp/rivals-workshop-assistant.zip
 
     - uses: actions/upload-artifact@v1
