@@ -40,13 +40,15 @@
             console.log('Assistant activated');
 
             GMEdit.on("fileSave", function (env) {
+                console.log(`File saved. Reexporting.`)
                 runAssistant(env);
             })
 
-            const watcherEnvs = new Set()
+            const watcherEnvs = []
             const watcher = chokidar.watch().on('change', (path, event) => {
                 console.log(`${path} changed. Reexporting.`)
                 for (const env of watcherEnvs) {
+                    console.log(`Running for`, env)
                     runAssistant(env)
                 }
             })
@@ -54,9 +56,10 @@
             GMEdit.on("projectOpen", function(env) {
                 console.log("Will now watch: "+`${getProjectDir()}/anims/`)
                 watcher.add(`${getProjectDir()}/anims/`)
-                watcherEnvs.add(env)
+                if (!watcherEnvs.map(env=>env.path).includes(env.path)){
+                    watcherEnvs.push(env)
+                }
             })
-
         },
     });
 })();
