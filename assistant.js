@@ -24,6 +24,7 @@
         console.log(env)
         try {
             const cursor = env.file.codeEditor.session.multiSelect.cursor;
+            const undoManager = env.file.session.getUndoManager();
             const row = cursor.row;
             const column = cursor.column;
             console.log("cursor pos is", row, column)
@@ -31,6 +32,7 @@
             env.file.editor.load();
             env.file.editor.session.setValue(env.file.code);
             env.file.editor.session.selection.moveCursorTo(row, column);
+            env.file.session.setUndoManager(undoManager);
         } catch (err) {}
 
     }
