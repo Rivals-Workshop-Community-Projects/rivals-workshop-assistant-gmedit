@@ -47,3 +47,12 @@ jobs:
       with:
         files: "tmp/rivals-workshop-assistant.zip"
         tag_name: ${{ github.event.client_payload.tag }}
+
+
+    - name: GMEdit Config Dispatch
+      uses: peter-evans/repository-dispatch@v1
+      with:
+        token: ${{ secrets.REPO_ACCESS_TOKEN }}
+        repository: Rivals-Workshop-Community-Projects/GMEdit-rivals-config
+        event-type: gmedit-plugin-push
+        client-payload: '{"tag": "${{ github.event.inputs.tag }}"}'
