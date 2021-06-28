@@ -55,4 +55,4 @@ jobs:
         token: ${{ secrets.REPO_ACCESS_TOKEN }}
         repository: Rivals-Workshop-Community-Projects/GMEdit-rivals-config
         event-type: gmedit-plugin-push
-        client-payload: '{"tag": "${{ github.event.inputs.tag }}"}'
+        client-payload: '{"tag": "${{ github.event.client_payload.tag }}"}'
