@@ -5,35 +5,42 @@
 
     const chokidar = require(pluginDir + '/chokidar');
 
-    function getProjectDir(){
+    function getProjectDir() {
         return $gmedit["gml.Project"].current.dir;
     }
 
     function runAssistant(env) {
-        console.log("RUN")
+        const undoManager = env.file.editor.session.getUndoManager()
+        undoManager.$keepRedoStack = true;
+
         const projectDir = getProjectDir()
-        const command = `"${pluginDir}\\rivals_workshop_assistant.exe" `+ `"${projectDir}"`;
-        console.log("Command: ", command)
+        const command = `"${pluginDir}\\rivals_workshop_assistant.exe" ` + `"${projectDir}"`;
+        console.log("Running Command: ", command)
         try {
-            stdout = childProcess.execFileSync(command, [pluginDir], {shell: true})
+            const stdout = childProcess.execFileSync(command, [pluginDir], {shell: true})
+            console.log(`stdout: ${stdout}`);
         } catch (err) {
             console.log(err);
             return;
         }
-        console.log(`stdout: ${stdout}`);
+
         console.log(env)
         try {
             const cursor = env.file.codeEditor.session.multiSelect.cursor;
-            const undoManager = env.file.session.getUndoManager();
             const row = cursor.row;
             const column = cursor.column;
-            console.log("cursor pos is", row, column)
+
             // Manually reload gmedit window.
             env.file.editor.load();
             env.file.editor.session.setValue(env.file.code);
             env.file.editor.session.selection.moveCursorTo(row, column);
-            env.file.session.setUndoManager(undoManager);
-        } catch (err) {}
+
+            // console.log("New undo manager", undoManager)
+            // env.file.editor.session.setUndoManager(undoManager);
+            // console.log("After setting new undo manager", env.file.editor.session.getUndoManager())
+        } catch (err) {
+            console.log("Error in file refresh", err)
+        }
 
     }
 
@@ -55,10 +62,10 @@
                 }
             })
 
-            GMEdit.on("projectOpen", function(env) {
-                console.log("Will now watch: "+`${getProjectDir()}/anims/`)
+            GMEdit.on("projectOpen", function (env) {
+                console.log("Will now watch: " + `${getProjectDir()}/anims/`)
                 watcher.add(`${getProjectDir()}/anims/`)
-                if (!watcherEnvs.map(env=>env.path).includes(env.path)){
+                if (!watcherEnvs.map(env => env.path).includes(env.path)) {
                     watcherEnvs.push(env)
                 }
             })
