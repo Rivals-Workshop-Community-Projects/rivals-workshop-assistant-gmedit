@@ -9,20 +9,11 @@
         return $gmedit["gml.Project"].current.dir;
     }
 
-    function runAssistant(env) {
+    function runAssistantInAseprite(env) {
         const undoManager = env.file.editor.session.getUndoManager()
         undoManager.$keepRedoStack = true;
 
-        const projectDir = getProjectDir()
-        const command = `"${pluginDir}\\rivals_workshop_assistant.exe" ` + `"${projectDir}"`;
-        console.log("Running Command: ", command)
-        try {
-            const stdout = childProcess.execFileSync(command, [pluginDir], {shell: true})
-            console.log(`stdout: ${stdout}`);
-        } catch (err) {
-            console.log(err);
-            return;
-        }
+        runAssistant(env)
 
         console.log(env)
         try {
@@ -41,7 +32,19 @@
         } catch (err) {
             console.log("Error in file refresh", err)
         }
+    }
 
+    function runAssistant(env) {
+        const projectDir = getProjectDir()
+        const command = `"${pluginDir}\\rivals_workshop_assistant.exe" ` + `"${projectDir}"`;
+        console.log("Running Command: ", command)
+        try {
+            const stdout = childProcess.execFileSync(command, [pluginDir], {shell: true})
+            console.log(`stdout: ${stdout}`);
+        } catch (err) {
+            console.log(err);
+            throw err
+        }
     }
 
     GMEdit.register("rivals-workshop-assistant-gmedit", {
@@ -50,7 +53,7 @@
 
             GMEdit.on("fileSave", function (env) {
                 console.log(`File saved. Reexporting.`)
-                runAssistant(env);
+                runAssistantInAseprite(env);
             })
 
             const watcherEnvs = []
