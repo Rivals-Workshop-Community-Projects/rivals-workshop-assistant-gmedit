@@ -57,7 +57,12 @@
             })
 
             const watcherEnvs = []
-            const watcher = chokidar.watch().on('change', (path, event) => {
+            const watcher = chokidar.watch([], {
+                awaitWriteFinish: {
+                    stabilityThreshold: 2000,
+                    pollInterval: 100
+                },
+            }).on('change', (path, event) => {
                 console.log(`${path} changed. Reexporting.`)
                 for (const env of watcherEnvs) {
                     console.log(`Running for`, env)
