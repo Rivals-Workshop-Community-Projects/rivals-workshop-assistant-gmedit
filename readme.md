@@ -5,8 +5,6 @@ The assistant is described and documented [here, in the community library.](http
 
 ## Installation
 
-The GMEdit plugin is a bit more difficult to install than the VSCode plugin, and currently doesn't automatically update.
-
 1. Go to
    the [plugin's release page](https://github.com/Rivals-Workshop-Community-Projects/rivals-workshop-assistant-gmedit/releases)
    .
