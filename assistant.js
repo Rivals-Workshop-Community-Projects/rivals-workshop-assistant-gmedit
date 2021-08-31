@@ -5,38 +5,32 @@
 
     const chokidar = require(pluginDir + '/chokidar');
 
+    // const ALL_MODE = "all";
+    const ANIMS_MODE = "anims";
+    const SCRIPTS_MODE = "scripts";
+
     function getProjectDir() {
         return $gmedit["gml.Project"].current.dir;
     }
 
-    function runAssistantInAseprite(env) {
-        const undoManager = env.file.editor.session.getUndoManager()
-        undoManager.$keepRedoStack = true;
-
-        runAssistant(env)
-
-        console.log(env)
+    function reloadEditor(env) {
         try {
             const cursor = env.file.codeEditor.session.multiSelect.cursor;
-            const row = cursor.row;
+            const row = cursor.row; // Need to unpack to avoid being overwritten
             const column = cursor.column;
 
             // Manually reload gmedit window.
             env.file.editor.load();
-            env.file.editor.session.setValue(env.file.code);
+            env.file.editor.session.doc.setValue(env.file.code);
             env.file.editor.session.selection.moveCursorTo(row, column);
-
-            // console.log("New undo manager", undoManager)
-            // env.file.editor.session.setUndoManager(undoManager);
-            // console.log("After setting new undo manager", env.file.editor.session.getUndoManager())
         } catch (err) {
             console.log("Error in file refresh", err)
         }
     }
 
-    function runAssistant(env) {
+    function runAssistant(mode) {
         const projectDir = getProjectDir()
-        const command = `"${pluginDir}\\rivals_workshop_assistant.exe" ` + `"${projectDir}"`;
+        const command = `"${pluginDir}\\rivals_workshop_assistant.exe" ` + `"${projectDir}" ` + mode;
         console.log("Running Command: ", command)
         try {
             const stdout = childProcess.execFileSync(command, [pluginDir], {shell: true})
@@ -53,7 +47,8 @@
 
             GMEdit.on("fileSave", function (env) {
                 console.log(`File saved. Reexporting.`)
-                runAssistantInAseprite(env);
+                runAssistant(SCRIPTS_MODE);
+                reloadEditor(env);
             })
 
             const watcherEnvs = []
@@ -65,8 +60,7 @@
             }).on('change', (path, event) => {
                 console.log(`${path} changed. Reexporting.`)
                 for (const env of watcherEnvs) {
-                    console.log(`Running for`, env)
-                    runAssistant(env)
+                    runAssistant(ANIMS_MODE);
                 }
             })
 
