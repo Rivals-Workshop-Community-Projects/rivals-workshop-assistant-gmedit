@@ -4,6 +4,7 @@
     const pluginDir = pluginRootDir + '/rivals-workshop-assistant-gmedit';
 
     const chokidar = require(pluginDir + '/chokidar');
+    const watcherPaths = []
 
     // const ALL_MODE = "all";
     const ANIMS_MODE = "anims";
@@ -41,6 +42,14 @@
         }
     }
 
+    function watchCurrentProjectAnims(watcher, path) {
+        console.log("Will now watch: " + `${getProjectDir()}/anims/`)
+        watcher.add(`${getProjectDir()}/anims/`)
+        if (!watcherPaths.includes(path)) {
+            watcherPaths.push(path)
+        }
+    }
+
     GMEdit.register("rivals-workshop-assistant-gmedit", {
         init: function () {
             console.log('Assistant activated');
@@ -51,7 +60,6 @@
                 reloadEditor(env);
             })
 
-            const watcherEnvs = []
             const watcher = chokidar.watch([], {
                 awaitWriteFinish: {
                     stabilityThreshold: 2000,
@@ -59,17 +67,16 @@
                 },
             }).on('change', (path, event) => {
                 console.log(`${path} changed. Reexporting.`)
-                for (const env of watcherEnvs) {
-                    runAssistant(ANIMS_MODE);
-                }
+                runAssistant(ANIMS_MODE);
             })
 
-            GMEdit.on("projectOpen", function (env) {
-                console.log("Will now watch: " + `${getProjectDir()}/anims/`)
-                watcher.add(`${getProjectDir()}/anims/`)
-                if (!watcherEnvs.map(env => env.path).includes(env.path)) {
-                    watcherEnvs.push(env)
-                }
+            const projectPath = $gmedit["gml.Project"].current.dir
+            if(projectPath) {
+                watchCurrentProjectAnims(watcher, projectPath)
+            }
+
+            GMEdit.on("projectOpen", function (projectPath) {
+                watchCurrentProjectAnims(watcher, projectPath)
             })
         },
     });
