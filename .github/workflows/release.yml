@@ -34,7 +34,7 @@ jobs:
 
     - run: ls tmp/rivals-workshop-assistant-gmedit
 
-    - uses: papeloto/action-zip@v1
+    - uses: vimtor/action-zip@v1
       with:
         files: tmp/
         dest: tmp/rivals-workshop-assistant.zip
